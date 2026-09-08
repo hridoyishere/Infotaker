@@ -1,0 +1,7 @@
+/* backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '950px' */
+
+.App {
+    background-size: cover;
+    background-position: center;
+    min-height: 950px;
+}

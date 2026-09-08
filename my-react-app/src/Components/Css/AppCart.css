@@ -1,0 +1,83 @@
+.AppCart {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 20px;
+  padding: 30px;
+  margin: 0 auto;
+}
+
+/* Entire card is clickable */
+.site-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  text-decoration: none;
+  color: #222;
+
+  cursor: pointer;
+}
+
+/* Letter circle */
+.site-letter {
+  width: 65px;
+  height: 65px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 20%;
+
+  background: rgba(255, 255, 255, 0.6);
+
+  color: #202124;
+
+  font-size: 28px;
+  font-weight: 600;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+/* Site name */
+.site-name {
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  color: white;
+}
+
+/* Hover effect */
+.site-card:hover .site-letter {
+  transform: translateY(-4px);
+  background: #e8eaed;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+/* Click effect */
+.site-card:active .site-letter {
+  transform: scale(0.94);
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .AppCart {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px 15px;
+    padding: 20px;
+  }
+
+  .site-letter {
+    width: 55px;
+    height: 55px;
+    font-size: 24px;
+  }
+
+  .site-name {
+    font-size: 13px;
+  }
+}
