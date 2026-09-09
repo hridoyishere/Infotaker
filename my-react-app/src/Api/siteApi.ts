@@ -12,6 +12,12 @@ export interface SiteResponse {
   sites: SiteData[];
 }
 
+export interface RemoveSiteResponse {
+  success: boolean;
+  message?: string;
+  error?: string;
+}
+
 export interface CreateSiteResponse {
   success: boolean;
   message?: string;
@@ -41,14 +47,17 @@ export const createSite = async (
   return response.json();
 };
 
-export const getSites = async (
-  userid: string,
-): Promise<SiteResponse> => {
+export const getSites = async ( userid: string,): Promise<SiteResponse> => {
+
   const response = await fetch(`${API_URL}/${userid}`);
 
-  if (!response.ok) {
-    throw new Error("Failed to get sites");
-  }
+  return response.json();
+};
+
+export const removeSite = async (  siteid: string, userid: string ): Promise<RemoveSiteResponse> => {
+  const response = await fetch(`${API_URL}/${siteid}/${userid}`, {
+    method: "DELETE",
+  });
 
   return response.json();
 };

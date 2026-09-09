@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getSites } from "../../Api/siteApi";
+import { getSites, removeSite } from "../../Api/siteApi";
 import { getUser } from "../../Api/authStorage";
 import { useApp } from "../../Context";
 import "../Css/AppCart.css";
@@ -8,14 +8,45 @@ export default function AppCart() {
   const user = getUser();
 
   const { siteData, setSiteData, setRespond } = useApp();
+  const [loading, setloading] = useState(false);
 
   const [openMenu, setOpenMenu] = useState<string | null>(null);
 
+  console.log(siteData);
+
   // Remove site
-  const handleRemove = (id: string) => {
-    setSiteData((currentSites) =>
-      currentSites.filter((site) => site._id !== id),
-    );
+  const handleRemove = async (id: string) => {
+    if (!id || !user) return;
+
+    try {
+      setloading(true);
+      const data = await removeSite(id, user.id);
+
+      if (!data.success) {
+        setRespond({
+          message: data.error || "Failed to delete site",
+          type: "error",
+        });
+        setloading(false);
+        return;
+      } else {
+        setRespond({
+          message: data.message || "Delete Successfull",
+          type: "success",
+        });
+        setSiteData((currentSites) =>
+          currentSites.filter((site) => site._id !== id),
+        );
+        setloading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setloading(false);
+      setRespond({
+        message: "Something went wrong while delete site.",
+        type: "error",
+      });
+    }
 
     setOpenMenu(null);
   };
@@ -32,14 +63,11 @@ export default function AppCart() {
           message: data.error || "Failed to fetch sites",
           type: "error",
         });
-
         return;
       }
-
       setSiteData(data.sites);
     } catch (error) {
       console.error("Fetching sites error:", error);
-
       setRespond({
         message: "Something went wrong while fetching sites.",
         type: "error",
@@ -78,8 +106,9 @@ export default function AppCart() {
                     handleRemove(site._id);
                   }
                 }}
+                disabled={loading}
               >
-                Remove
+                {loading ? <div className="loader"></div> : "Remove"}
               </button>
             </div>
           )}

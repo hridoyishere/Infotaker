@@ -12,6 +12,7 @@ function Navbar() {
   const user = getUser();
   const { shownote, setShownNote, setRespond } = useApp();
   const [PopUP, setPopUP] = useState(false);
+  const [loading,setloading]=useState(false)
   const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(false);
 
   const openAddSitePopup = () => {
@@ -34,6 +35,7 @@ function Navbar() {
   if (!user) return;
 
   try {
+    setloading(true)
     const data = await createSite(name, url, user.id);
 
     if (!data.success) {
@@ -41,7 +43,7 @@ function Navbar() {
         message: data.error || "Failed to add site",
         type: "error",
       });
-
+      setloading(false)
       return;
     }
 
@@ -49,11 +51,11 @@ function Navbar() {
       message: data.message || "Site added successfully!",
       type: "success",
     });
-
+    setloading(false)
     setPopUP(false);
   } catch (error) {
     console.error("Add site error:", error);
-
+    setloading(false)
     setRespond({
       message: "Something went wrong while adding the site.",
       type: "error",
@@ -69,7 +71,7 @@ function Navbar() {
         (shownote ? (
           <AddNotePopUp onClose={closeAddSitePopup} onSubmit={handleAddSite} />
         ) : (
-          <AddSitePopUp onClose={closeAddSitePopup} onSubmit={handleAddSite} />
+          <AddSitePopUp onClose={closeAddSitePopup} onSubmit={handleAddSite} loading={loading} />
         ))}
 
       <div className="nav-container">

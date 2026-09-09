@@ -101,3 +101,69 @@ export const createSite = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const removeSite = async (req: Request, res: Response) => {
+  try {
+    const userid = req.params.userid as string;
+    const siteid = req.params.siteid as string;
+
+    console.log(userid,siteid)
+
+    // Check site ID
+    if (!siteid || !userid) {
+      return res.status(400).json({
+        success: false,
+        error: "Site and user ID is required",
+      });
+    }
+
+    // Check whether ID is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(siteid)) {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid site ID",
+      });
+    }
+    if (!mongoose.Types.ObjectId.isValid(userid)) {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid user ID",
+      });
+    }
+
+    // Check user exists
+    const user = await User.findById(userid);
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        error: "Unauthorized request",
+      });
+    }
+
+    // Find the site
+    const site = await Site.findById(siteid);
+
+    if (!site) {
+      return res.status(404).json({
+        success: false,
+        error: "Site not found",
+      });
+    }
+
+    // Delete the site
+    await Site.findByIdAndDelete(siteid);
+
+    return res.status(200).json({
+      success: true,
+      message: "Site removed successfully",
+    });
+  } catch (error) {
+    console.error("Remove site error:", error);
+
+    return res.status(500).json({
+      success: false,
+      error: "Failed to remove site",
+    });
+  }
+};

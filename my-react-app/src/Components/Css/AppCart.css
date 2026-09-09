@@ -251,9 +251,7 @@
 }
 
 
-/* =========================================================
-   MENU ANIMATION
-   ========================================================= */
+   /* MENU ANIMATION */
 
 @keyframes menuAppear {
   from {
@@ -319,5 +317,27 @@
 
   .site-menu {
     top: 30px;
+  }
+}
+
+
+
+.loader {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ddd;
+  border-top-color: #333;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }

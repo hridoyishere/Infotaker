@@ -4,9 +4,14 @@ import "../Css/AddSitePopUp.css";
 interface AddSitePopUpProps {
   onClose: () => void;
   onSubmit: (name: string, url: string) => void;
+  loading: boolean;
 }
 
-export const AddSitePopUp = ({ onClose, onSubmit }: AddSitePopUpProps) => {
+export const AddSitePopUp = ({
+  onClose,
+  onSubmit,
+  loading,
+}: AddSitePopUpProps) => {
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
 
@@ -48,7 +53,9 @@ export const AddSitePopUp = ({ onClose, onSubmit }: AddSitePopUpProps) => {
             required
           />
 
-          <button type="submit">Add Site</button>
+          <button type="submit" disabled={loading}>
+            {loading ? <div className="loader"></div> : "Add Site"}
+          </button>
         </form>
       </div>
     </>
