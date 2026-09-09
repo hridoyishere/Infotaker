@@ -4,6 +4,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
+  logintry: number;
 }
 
 const userSchema = new Schema<IUser>(
@@ -26,12 +27,20 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: true,
     },
+
+    logintry: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const User = mongoose.model<IUser>("SiteSavedUser", userSchema);
+const User = mongoose.model<IUser>(
+  "SiteSavedUser",
+  userSchema
+);
 
 export default User;

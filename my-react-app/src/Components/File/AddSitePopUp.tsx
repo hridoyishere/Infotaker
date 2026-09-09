@@ -6,10 +6,7 @@ interface AddSitePopUpProps {
   onSubmit: (name: string, url: string) => void;
 }
 
-export const AddSitePopUp = ({
-  onClose,
-  onSubmit,
-}: AddSitePopUpProps) => {
+export const AddSitePopUp = ({ onClose, onSubmit }: AddSitePopUpProps) => {
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
 
@@ -21,10 +18,7 @@ export const AddSitePopUp = ({
 
   return (
     <>
-      <div
-        className="add-site-popup-backdrop"
-        onClick={onClose}
-      />
+      <div className="add-site-popup-backdrop" onClick={onClose} />
 
       <div className="add-site-popup">
         <h2>Add New Site</h2>
@@ -54,9 +48,7 @@ export const AddSitePopUp = ({
             required
           />
 
-          <button type="submit">
-            Add Site
-          </button>
+          <button type="submit">Add Site</button>
         </form>
       </div>
     </>

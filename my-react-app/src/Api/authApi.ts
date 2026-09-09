@@ -5,6 +5,8 @@ export interface User {
 }
 
 interface AuthResponse {
+  error:string;
+  success:boolean;
   message: string;
   token: string;
   user: User;
@@ -31,10 +33,6 @@ export const registerUser = async (
 
   const data = await response.json();
 
-  if (!response.ok) {
-    throw new Error(data.message || "Registration failed");
-  }
-
   return data;
 };
 
@@ -54,10 +52,6 @@ export const loginUser = async (
   });
 
   const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Login failed");
-  }
 
   return data;
 };

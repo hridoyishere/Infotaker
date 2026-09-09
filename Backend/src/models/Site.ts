@@ -1,18 +1,20 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface ISite extends Document {
-  userid:string;
+  userid: mongoose.Types.ObjectId;
   name: string;
   url: string;
 }
 
 const siteSchema = new Schema<ISite>(
   {
-    userid:{
-        type:String,
-        required: true,
-        trim:true
+    userid: {
+      type: Schema.Types.ObjectId,
+      ref: "SiteSavedUser",
+      required: true,
+      index: true,
     },
+
     name: {
       type: String,
       required: true,

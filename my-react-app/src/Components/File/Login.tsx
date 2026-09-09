@@ -10,10 +10,12 @@ export default function LoginPopUp() {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setRespond({
+            message:"",
+            type: "",
+          });
 
     const formData = new FormData(e.currentTarget);
 
@@ -28,42 +30,72 @@ export default function LoginPopUp() {
         // LOGIN
         const data = await loginUser(email, password);
 
-        saveAuthData(data.token, data.user);
+        console.log("Login response:", data);
+
+        if (!data.success) {
+          setRespond({
+            message: data.error || "Login failed. Please try again.",
+            type: "error",
+          });
+
+          return;
+        }
+
+        // Successful login
+        if (data.token && data.user) {
+          saveAuthData(data.token, data.user);
+        }
 
         setRespond({
-          message: data.message,
+          message: data.message || "Login successful!",
           type: "success",
         });
+
+        // Reload after showing success message
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } else {
         // REGISTER
-        const data = await registerUser(
-          name,
-          email,
-          password
-        );
+        const data = await registerUser(name, email, password);
 
-        saveAuthData(data.token, data.user);
+        console.log("Register response:", data);
+
+        if (!data.success) {
+          setRespond({
+            message: data.error || "Registration failed. Please try again.",
+            type: "error",
+          });
+
+          return;
+        }
+
+        // Successful registration
+        if (data.token && data.user) {
+          saveAuthData(data.token, data.user);
+        }
 
         setRespond({
-          message: data.message,
+          message: data.message || "Registration successful!",
           type: "success",
         });
+
+        // Reload after showing success message
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       }
     } catch (error) {
       console.error("Authentication error:", error);
 
       if (!navigator.onLine) {
         setRespond({
-          message:
-            "You are offline. Please connect to the internet.",
+          message: "You are offline. Please connect to the internet.",
           type: "error",
         });
       } else {
         setRespond({
-          message:
-            error instanceof Error
-              ? error.message
-              : "Something went wrong. Please try again.",
+          message: "Something went wrong. Please try again.",
           type: "error",
         });
       }
@@ -97,31 +129,15 @@ export default function LoginPopUp() {
           </button>
         </div>
 
-        <h2>
-          {isLogin ? "Welcome Back" : "Create Account"}
-        </h2>
+        <h2>{isLogin ? "Welcome Back" : "Create Account"}</h2>
 
-        <p>
-          {isLogin
-            ? "Login to continue"
-            : "Create your new account"}
-        </p>
+        <p>{isLogin ? "Login to continue" : "Create your new account"}</p>
 
         {!isLogin && (
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            required
-          />
+          <input type="text" name="name" placeholder="Name" required />
         )}
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          required
-        />
+        <input type="email" name="email" placeholder="Email" required />
 
         <input
           type="password"
@@ -130,16 +146,8 @@ export default function LoginPopUp() {
           required
         />
 
-        <button
-          className="submit-btn"
-          type="submit"
-          disabled={loading}
-        >
-          {loading
-            ? "Please wait..."
-            : isLogin
-            ? "Login"
-            : "Register"}
+        <button className="submit-btn" type="submit" disabled={loading}>
+          {loading ? "Please wait..." : isLogin ? "Login" : "Register"}
         </button>
       </form>
     </div>

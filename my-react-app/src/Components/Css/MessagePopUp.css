@@ -1,18 +1,21 @@
-.message-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(6px);
-}
 
 .message-popup {
-  width: min(90%, 320px);
-  padding: 25px;
-  text-align: center;
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  z-index: 9999;
+
+  width: min(90%, 450px);
+  min-height: 55px;
+
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 10px 14px;
+
   box-sizing: border-box;
 
   background: rgba(255, 255, 255, 0.2);
@@ -20,68 +23,129 @@
   -webkit-backdrop-filter: blur(20px);
 
   border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 18px;
+  border-radius: 12px;
 
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 
-  animation: messageIn 0.25s ease;
+  animation: messageSlideDown 0.3s ease;
+  cursor: pointer;
 }
 
+/* Icon */
+
 .message-icon {
-  width: 45px;
-  height: 45px;
-  margin: 0 auto 12px;
+  width: 32px;
+  height: 32px;
+
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
+
+  background: rgba(255, 255, 255, 0.25);
 
   color: white;
-  font-size: 27px;
+  font-size: 20px;
   font-weight: bold;
 }
 
-.message-popup h3 {
-  margin: 0 0 7px;
-  color: white;
-  font-size: 21px;
-}
+/* Message */
 
 .message-popup p {
-  margin: 0 0 18px;
-  color: rgba(255, 255, 255, 0.8);
+  flex: 1;
+
+  margin: 0;
+
+  color: white;
+
   font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
-.message-popup button {
-  padding: 9px 28px;
+/* Close button */
+
+.message-close {
+  width: 28px;
+  height: 28px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
   border: none;
-  border-radius: 9px;
+  border-radius: 50%;
 
-  background: rgba(255, 255, 255, 0.85);
-  color: #222;
+  background: transparent;
 
-  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+
+  font-size: 20px;
+  line-height: 1;
+
   cursor: pointer;
-  transition: 0.2s;
+
+  transition: background 0.2s ease;
 }
 
-.message-popup button:hover {
-  background: white;
-  transform: translateY(-2px);
+.message-close:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
-@keyframes messageIn {
+/* Success */
+
+.message-popup.success {
+  border-left: 4px solid #4caf50;
+}
+
+/* Error */
+
+.message-popup.error {
+  border-left: 4px solid #f44336;
+}
+
+/* Animation */
+
+@keyframes messageSlideDown {
   from {
     opacity: 0;
-    transform: scale(0.9) translateY(10px);
+    transform: translate(-50%, -30px);
   }
 
   to {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .message-popup {
+    top: 12px;
+
+    width: calc(100% - 24px);
+
+    min-height: 52px;
+
+    padding: 9px 12px;
+  }
+
+  .message-icon {
+    width: 30px;
+    height: 30px;
+
+    font-size: 18px;
+  }
+
+  .message-popup p {
+    font-size: 13px;
   }
 }

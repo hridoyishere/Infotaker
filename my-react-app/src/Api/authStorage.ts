@@ -1,9 +1,7 @@
 import type { User } from "./authApi";
 
-export const saveAuthData = (
-  token: string,
-  user: User
-) => {
+export const saveAuthData = (token: string, user: User) => {
+  
   localStorage.setItem("token", token);
   localStorage.setItem("user", JSON.stringify(user));
 };

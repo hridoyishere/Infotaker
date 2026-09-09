@@ -1,3 +1,5 @@
+import { getUser } from "../../Api/authStorage";
+
 import "../Css/ProfilePopUp.css";
 
 interface ProfilePopUpProps {
@@ -5,6 +7,12 @@ interface ProfilePopUpProps {
 }
 
 export const ProfilePopUp = ({ onClose }: ProfilePopUpProps) => {
+  const User=getUser()
+
+  const LogOut = ()=>{
+    localStorage.clear()
+  }
+
   return (
     <>
       {/* Backdrop */}
@@ -24,8 +32,8 @@ export const ProfilePopUp = ({ onClose }: ProfilePopUpProps) => {
           </div>
 
           <div className="profile-info">
-            <h3>Hridoy</h3>
-            <p>hridoy@example.com</p>
+            <h3>{User?.name}</h3>
+            <p>{User?.email}</p>
           </div>
 
         </div>
@@ -33,21 +41,12 @@ export const ProfilePopUp = ({ onClose }: ProfilePopUpProps) => {
         {/* Menu */}
         <div className="profile-menu">
 
-          <button className="profile-menu-item">
-            <span>✏️</span>
-            Edit Profile
-          </button>
-
-          <button className="profile-menu-item">
-            <span>⚙️</span>
-            Settings
-          </button>
-
           <button
             className="profile-menu-item logout"
             onClick={() => {
-              console.log("Logout");
+              LogOut()
               onClose();
+              window.location.reload();
             }}
           >
             <span>↪</span>

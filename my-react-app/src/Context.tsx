@@ -1,9 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 
 interface ResponseData {
   message: string;
@@ -18,9 +13,12 @@ interface AppContextType {
   setRespond: React.Dispatch<React.SetStateAction<ResponseData>>;
 }
 
-const AppContext = createContext<AppContextType | undefined>(
-  undefined
-);
+interface AppContextType {
+  siteData: SiteDatas[];
+  setSiteData: React.Dispatch<React.SetStateAction<SiteDatas[]>>;
+}
+
+const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const useApp = () => {
   const context = useContext(AppContext);
@@ -36,8 +34,16 @@ interface AppProviderProps {
   children: ReactNode;
 }
 
+interface SiteDatas {
+  _id?: string;
+  userid: string;
+  name: string;
+  url: string;
+}
+
 export const AppProvider = ({ children }: AppProviderProps) => {
   const [shownote, setShownNote] = useState(false);
+  const [siteData, setSiteData] = useState<SiteDatas[]>([]);
 
   const [respond, setRespond] = useState<ResponseData>({
     message: "",
@@ -49,11 +55,9 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     setShownNote,
     respond,
     setRespond,
+    siteData,
+    setSiteData,
   };
 
-  return (
-    <AppContext.Provider value={value}>
-      {children}
-    </AppContext.Provider>
-  );
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

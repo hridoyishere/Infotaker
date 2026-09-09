@@ -17,27 +17,24 @@ export default function MessagePopUp() {
 
   return (
     <div
-      className="message-overlay"
+      className={`message-popup ${respond.type}`}
       onClick={handleClose}
     >
-      <div
-        className={`message-popup ${respond.type}`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="message-icon">
-          {respond.type === "success" ? "✓" : "×"}
-        </div>
-
-        <h3>
-          {respond.type === "success"
-            ? "Success"
-            : "Failed"}
-        </h3>
-
-        <p>{respond.message}</p>
-
-        <button onClick={handleClose}>OK</button>
+      <div className="message-icon">
+        {respond.type === "success" ? "✓" : "×"}
       </div>
+
+      <p>{respond.message}</p>
+
+      <button
+        className="message-close"
+        onClick={(e) => {
+          e.stopPropagation();
+          handleClose();
+        }}
+      >
+        ×
+      </button>
     </div>
   );
 }
