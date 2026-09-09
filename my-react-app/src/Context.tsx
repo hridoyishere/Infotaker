@@ -1,4 +1,3 @@
-
 import {
   createContext,
   useContext,
@@ -6,9 +5,17 @@ import {
   type ReactNode,
 } from "react";
 
+interface ResponseData {
+  message: string;
+  type: "success" | "error" | "";
+}
+
 interface AppContextType {
   shownote: boolean;
   setShownNote: React.Dispatch<React.SetStateAction<boolean>>;
+
+  respond: ResponseData;
+  setRespond: React.Dispatch<React.SetStateAction<ResponseData>>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(
@@ -29,14 +36,19 @@ interface AppProviderProps {
   children: ReactNode;
 }
 
-export const AppProvider = ({
-  children,
-}: AppProviderProps) => {
-  const [shownote, setShownNote] = useState<boolean>(false);
+export const AppProvider = ({ children }: AppProviderProps) => {
+  const [shownote, setShownNote] = useState(false);
+
+  const [respond, setRespond] = useState<ResponseData>({
+    message: "",
+    type: "",
+  });
 
   const value: AppContextType = {
     shownote,
     setShownNote,
+    respond,
+    setRespond,
   };
 
   return (

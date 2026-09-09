@@ -1,0 +1,87 @@
+.message-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(6px);
+}
+
+.message-popup {
+  width: min(90%, 320px);
+  padding: 25px;
+  text-align: center;
+  box-sizing: border-box;
+
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 18px;
+
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+
+  animation: messageIn 0.25s ease;
+}
+
+.message-icon {
+  width: 45px;
+  height: 45px;
+  margin: 0 auto 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+
+  color: white;
+  font-size: 27px;
+  font-weight: bold;
+}
+
+.message-popup h3 {
+  margin: 0 0 7px;
+  color: white;
+  font-size: 21px;
+}
+
+.message-popup p {
+  margin: 0 0 18px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
+
+.message-popup button {
+  padding: 9px 28px;
+  border: none;
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.85);
+  color: #222;
+
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.message-popup button:hover {
+  background: white;
+  transform: translateY(-2px);
+}
+
+@keyframes messageIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

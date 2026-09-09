@@ -22,24 +22,25 @@ export const AddNotePopUp = ({
 
   return (
     <div className="add-note" onClick={onClose}>
-      <h2>Add Note</h2>
+      
 
       <form onSubmit={handleSubmit} onClick={(e) => e.stopPropagation()}>
-        <input
-          type="text"
-          name="title"
-          placeholder="Title"
-        />
 
-        <textarea
-          name="content"
-          placeholder="Content"
-        />
+  <input
+    type="text"
+    name="title"
+    placeholder="Title"
+  />
 
-        <button type="submit">
-          Add Note
-        </button>
-      </form>
+  <textarea
+    name="content"
+    placeholder="Content"
+  />
+
+  <button type="submit">
+    Add Note
+  </button>
+</form>
     </div>
   );
 };

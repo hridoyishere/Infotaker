@@ -1,3 +1,7 @@
+/* =========================================================
+   APP CART
+   ========================================================= */
+
 .AppCart {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -6,20 +10,78 @@
   margin: 0 auto;
 }
 
-/* Entire card is clickable */
+
+/* =========================================================
+   SITE CARD
+   ========================================================= */
+
 .site-card {
+  position: relative;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
 
-  text-decoration: none;
-  color: #222;
+  gap: 10px;
 
   cursor: pointer;
 }
 
-/* Letter circle */
+
+/* =========================================================
+   SITE LINK
+   ========================================================= */
+
+.site-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 10px;
+
+  width: 100%;
+
+  text-decoration: none;
+  color: #222;
+}
+
+
+/* =========================================================
+   SITE LOGO
+   ========================================================= */
+
+.site-logo {
+  width: 65px;
+  height: 65px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 20%;
+
+  background: rgba(255, 255, 255, 0.6);
+
+  overflow: hidden;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.site-logo img {
+  width: 38px;
+  height: 38px;
+
+  object-fit: contain;
+}
+
+
+/* =========================================================
+   FALLBACK LETTER
+   ========================================================= */
+
 .site-letter {
   width: 65px;
   height: 65px;
@@ -43,41 +105,219 @@
     background 0.2s ease;
 }
 
-/* Site name */
+
+/* =========================================================
+   SITE NAME
+   ========================================================= */
+
 .site-name {
   font-size: 14px;
   font-weight: 500;
+
   text-align: center;
+
   color: white;
+
+  max-width: 100px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* Hover effect */
+
+/* =========================================================
+   HOVER EFFECT
+   ========================================================= */
+
+.site-card:hover .site-logo,
 .site-card:hover .site-letter {
   transform: translateY(-4px);
+
   background: #e8eaed;
+
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
 }
 
-/* Click effect */
-.site-card:active .site-letter {
+
+/* =========================================================
+   CLICK EFFECT
+   ========================================================= */
+
+.site-link:active .site-logo,
+.site-link:active .site-letter {
   transform: scale(0.94);
 }
 
-/* Mobile */
+
+/* =========================================================
+   THREE DOT MENU BUTTON
+   ========================================================= */
+
+.site-menu-btn {
+  position: absolute;
+
+  top: 0;
+  right: 0;
+
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: rgba(255, 255, 255, 0.8);
+
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  z-index: 5;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.site-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+
+/* =========================================================
+   DROPDOWN MENU
+   ========================================================= */
+
+.site-menu {
+  position: absolute;
+
+  top: 32px;
+  right: 0;
+
+  min-width: 110px;
+
+  padding: 5px;
+
+  background: white;
+
+  border: 1px solid #eee;
+  border-radius: 9px;
+
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+
+  z-index: 20;
+
+  animation: menuAppear 0.15s ease;
+}
+
+
+/* =========================================================
+   MENU BUTTON
+   ========================================================= */
+
+.site-menu button {
+  width: 100%;
+
+  padding: 9px 12px;
+
+  border: none;
+  border-radius: 6px;
+
+  background: transparent;
+
+  color: #d33;
+
+  font-size: 14px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+}
+
+.site-menu button:hover {
+  background: #f5f5f5;
+}
+
+
+/* =========================================================
+   MENU ANIMATION
+   ========================================================= */
+
+@keyframes menuAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
 @media (max-width: 600px) {
+
   .AppCart {
     grid-template-columns: repeat(3, 1fr);
+
     gap: 25px 15px;
+
     padding: 20px;
   }
+
+
+  .site-logo {
+    width: 55px;
+    height: 55px;
+  }
+
+  .site-logo img {
+    width: 32px;
+    height: 32px;
+  }
+
 
   .site-letter {
     width: 55px;
     height: 55px;
+
     font-size: 24px;
   }
 
+
   .site-name {
     font-size: 13px;
+
+    max-width: 80px;
+  }
+
+
+  .site-menu-btn {
+    width: 26px;
+    height: 26px;
+
+    font-size: 18px;
+  }
+
+
+  .site-menu {
+    top: 30px;
   }
 }

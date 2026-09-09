@@ -53,9 +53,7 @@ const closeProfilePopup = () => {
 
         {/* Brand Logo */}
         <div className="nav-logo">
-          <a href="/">
-            Your Sites<span>.</span>
-          </a>
+            <span>Notes</span>
         </div>
 
         {/* Search Bar */}
