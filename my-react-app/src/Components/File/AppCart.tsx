@@ -78,55 +78,62 @@ export default function AppCart() {
 
   return (
     <div className="AppCart" onClick={() => setOpenMenu(null)}>
-      {siteData.map((site) => (
-        <div className="site-card" key={site._id}>
-          {/* Three-dot button */}
-          <button
-            className="site-menu-btn"
-            onClick={(e) => {
-              e.stopPropagation();
+      {siteData.length === 0 ? (
+       <div className="nofound">
+        <p>No link found!</p>
+       </div>
+      ) : (
+        siteData.map((site) => (
+          <div className="site-card" key={site._id}>
+            {/* Three-dot button */}
+            <button
+              className="site-menu-btn"
+              onClick={(e) => {
+                e.stopPropagation();
 
-              setOpenMenu(openMenu === site._id ? null : (site._id ?? null));
-            }}
-            aria-label="Site options"
-          >
-            ⋮
-          </button>
+                setOpenMenu(openMenu === site._id ? null : (site._id ?? null));
+              }}
+              aria-label="Site options"
+            >
+              ⋮
+            </button>
 
-          {/* Menu */}
-          {openMenu === site._id && (
-            <div className="site-menu" onClick={(e) => e.stopPropagation()}>
-              <button
-                onClick={() => {
-                  if (site._id) {
-                    handleRemove(site._id);
-                  }
-                }}
-                disabled={loading}
-              >
-                {loading ? <div className="loader"></div> : "Remove"}
-              </button>
-            </div>
-          )}
+            {/* Menu */}
+            {openMenu === site._id && (
+              <div className="site-menu" onClick={(e) => e.stopPropagation()}>
+                <button
+                  onClick={() => {
+                    if (site._id) {
+                      handleRemove(site._id);
+                    }
+                  }}
+                  disabled={loading}
+                >
+                  {loading ? <div className="loader"></div> : "Remove"}
+                </button>
+                <button>Copy</button>
+              </div>
+            )}
 
-          {/* Site */}
-          <a
-            href={site.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="site-link"
-          >
-            <div className="site-logo">
-              <img
-                src={`https://www.google.com/s2/favicons?domain=${site.url}&sz=64`}
-                alt={`${site.name} logo`}
-              />
-            </div>
+            {/* Site */}
+            <a
+              href={site.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="site-link"
+            >
+              <div className="site-logo">
+                <img
+                  src={`https://www.google.com/s2/favicons?domain=${site.url}&sz=64`}
+                  alt={`${site.name} logo`}
+                />
+              </div>
 
-            <span className="site-name">{site.name}</span>
-          </a>
-        </div>
-      ))}
+              <span className="site-name">{site.name}</span>
+            </a>
+          </div>
+        ))
+      )}
     </div>
   );
 }

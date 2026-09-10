@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getNotes } from "../../Api/noteApi";
+import { getNotes, removeNote } from "../../Api/noteApi";
 import { useApp } from "../../Context";
 import { getUser } from "../../Api/authStorage";
 import "../Css/Note.css";
@@ -14,9 +14,7 @@ export default function NotePage() {
 
   const handleNoteFetching = async () => {
     if (!user) return;
-
     setLoading(true);
-
     try {
       const data = await getNotes(user.id);
 
@@ -42,8 +40,39 @@ export default function NotePage() {
     }
   };
 
-  const handleRemove = (index: number) => {
-    // remove logic will go here
+  const handleRemove = async (id: string) => {
+    if (!id || !user) return;
+
+    try {
+      setLoading(true);
+      const data = await removeNote(id, user.id);
+
+      if (!data.success) {
+        setRespond({
+          message: data.error || "Failed to delete site",
+          type: "error",
+        });
+        setLoading(false);
+        return;
+      } else {
+        setRespond({
+          message: data.message || "Delete Successfull",
+          type: "success",
+        });
+        setNoteData((currentSites) =>
+          currentSites.filter((site) => site._id !== id),
+        );
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      setRespond({
+        message: "Something went wrong while delete site.",
+        type: "error",
+      });
+    }
+    setOpenMenu(null);
   };
 
   useEffect(() => {
@@ -58,9 +87,7 @@ export default function NotePage() {
       </div>
 
       <div className="notes-container">
-        {loading ? (
-          <p>Loading notes...</p>
-        ) : noteData.length === 0 ? (
+        {noteData.length === 0 ? (
           <p>No notes found.</p>
         ) : (
           noteData.map((note, index) => (
@@ -79,7 +106,15 @@ export default function NotePage() {
 
               {openMenu === index && (
                 <div className="note-menu" onClick={(e) => e.stopPropagation()}>
-                  <button onClick={() => handleRemove(index)}>Remove</button>
+                  <button
+                    onClick={() => {
+                      if (note._id) handleRemove(note._id);
+                    }}
+                    disabled={loading}
+                  >
+                    {loading ? <div className="loader"></div> : "Remove"}
+                  </button>
+                  <button>Copy</button>
                 </div>
               )}
 

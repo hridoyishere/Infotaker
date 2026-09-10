@@ -11,7 +11,7 @@ interface AddNotePopUpProps {
 
 export const AddNotePopUp = ({ onClose }: AddNotePopUpProps) => {
   const user = getUser();
-  const { setRespond } = useApp();
+  const { setRespond, setNoteData } = useApp();
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,6 +41,7 @@ export const AddNotePopUp = ({ onClose }: AddNotePopUpProps) => {
         message: data.message || "Note added successfully!",
         type: "success",
       });
+      setNoteData((currentNote) => [...currentNote, data.note!]);
       setLoading(false);
       onClose();
     } catch (error) {
@@ -56,11 +57,11 @@ export const AddNotePopUp = ({ onClose }: AddNotePopUpProps) => {
   return (
     <div className="add-note" onClick={onClose}>
       <form onSubmit={handleSubmit} onClick={(e) => e.stopPropagation()}>
-        <input type="text" name="title" placeholder="Title" />
+        <input type="text" name="title" placeholder="Title" required/>
 
-        <textarea name="content" placeholder="Content" />
+        <textarea name="content" placeholder="Content" required/>
 
-        <button type="submit">
+        <button type="submit" disabled={loading}>
           {loading ? <div className="loader"></div> : "Add Note"}
         </button>
       </form>

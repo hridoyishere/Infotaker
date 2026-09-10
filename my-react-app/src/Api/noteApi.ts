@@ -17,6 +17,13 @@ export interface NoteResponse {
   error?: string;
   note: NoteData[];
 }
+
+export interface RemoveNoteResponse {
+  success: boolean;
+  message?: string;
+  error?: string;
+}
+
 const API_URL = "http://localhost:5000/api/notes";
 
 export const createNote = async (
@@ -41,6 +48,17 @@ export const createNote = async (
 
 export const getNotes = async (userid: string): Promise<NoteResponse> => {
   const response = await fetch(`${API_URL}/${userid}`);
+
+  return response.json();
+};
+
+export const removeNote = async (
+  noteid: string,
+  userid: string,
+): Promise<RemoveNoteResponse> => {
+  const response = await fetch(`${API_URL}/${noteid}/${userid}`, {
+    method: "DELETE",
+  });
 
   return response.json();
 };

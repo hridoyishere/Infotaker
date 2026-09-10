@@ -15,11 +15,15 @@ export default function MessagePopUp() {
     return null;
   }
 
+  setTimeout(() => {
+    setRespond({
+      message: "",
+      type: "",
+    });
+  }, 3000);
+
   return (
-    <div
-      className={`message-popup ${respond.type}`}
-      onClick={handleClose}
-    >
+    <div className={`message-popup ${respond.type}`} onClick={handleClose}>
       <div className="message-icon">
         {respond.type === "success" ? "✓" : "×"}
       </div>

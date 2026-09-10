@@ -10,9 +10,9 @@ import "../Css/Navbar.css";
 
 function Navbar() {
   const user = getUser();
-  const { shownote, setShownNote, setRespond } = useApp();
+  const { shownote, setShownNote, setRespond, setSiteData } = useApp();
   const [PopUP, setPopUP] = useState(false);
-  const [loading,setloading]=useState(false)
+  const [loading, setloading] = useState(false);
   const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(false);
 
   const openAddSitePopup = () => {
@@ -32,91 +32,99 @@ function Navbar() {
   };
 
   const handleAddSite = async (name: string, url: string) => {
-  if (!user) return;
+    if (!user) return;
 
-  try {
-    setloading(true)
-    const data = await createSite(name, url, user.id);
+    try {
+      setloading(true);
+      const data = await createSite(name, url, user.id);
 
-    if (!data.success) {
+      if (!data.success) {
+        setRespond({
+          message: data.error || "Failed to add site",
+          type: "error",
+        });
+        setloading(false);
+        return;
+      }
+
       setRespond({
-        message: data.error || "Failed to add site",
+        message: data.message || "Site added successfully!",
+        type: "success",
+      });
+      setSiteData((currentSites) => [...currentSites, data.site!]);
+      setloading(false);
+      setPopUP(false);
+    } catch (error) {
+      console.error("Add site error:", error);
+      setloading(false);
+      setRespond({
+        message: "Something went wrong while adding the site.",
         type: "error",
       });
-      setloading(false)
-      return;
     }
-
-    setRespond({
-      message: data.message || "Site added successfully!",
-      type: "success",
-    });
-    setloading(false)
-    setPopUP(false);
-  } catch (error) {
-    console.error("Add site error:", error);
-    setloading(false)
-    setRespond({
-      message: "Something went wrong while adding the site.",
-      type: "error",
-    });
-  }
-};
+  };
 
   return (
-    <nav className="navbar">
+    <>
+      <nav className="navbar">
+        <div className="nav-container">
+          {/* Brand Logo */}
+          <div className="nav-logo">
+            <span>Notes</span>
+          </div>
+
+          {/* Search Bar */}
+          <div className="nav-search">
+            <input type="text" placeholder="Search by name" />
+
+            <button type="submit" aria-label="Search">
+              <Search size={18} />
+            </button>
+          </div>
+
+          {/* Actions */}
+          <div className="nav-actions">
+            <button
+              className="icon-btn"
+              aria-label="Add Site"
+              onClick={() => setShownNote(!shownote)}
+            >
+              {shownote ? <StickyNote size={22} /> : <Globe size={22} />}
+            </button>
+
+            <button
+              className="icon-btn"
+              aria-label="Add Site"
+              onClick={openAddSitePopup}
+            >
+              <Plus size={22} />
+            </button>
+
+            <button
+              className="icon-btn"
+              aria-label="Account"
+              onClick={openProfilePopup}
+            >
+              <User size={22} />
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Modals OUTSIDE navbar */}
       {isProfilePopupOpen && <ProfilePopUp onClose={closeProfilePopup} />}
 
       {PopUP &&
         (shownote ? (
           <AddNotePopUp onClose={closeAddSitePopup} />
         ) : (
-          <AddSitePopUp onClose={closeAddSitePopup} onSubmit={handleAddSite} loading={loading} />
+          <AddSitePopUp
+            onClose={closeAddSitePopup}
+            onSubmit={handleAddSite}
+            loading={loading}
+          />
         ))}
-
-      <div className="nav-container">
-        {/* Brand Logo */}
-        <div className="nav-logo">
-          <span>Notes</span>
-        </div>
-
-        {/* Search Bar */}
-        <div className="nav-search">
-          <input type="text" placeholder="Search by name" />
-
-          <button type="submit" aria-label="Search">
-            <Search size={18} />
-          </button>
-        </div>
-
-        {/* Actions */}
-        <div className="nav-actions">
-          <button
-            className="icon-btn"
-            aria-label="Add Site"
-            onClick={() => setShownNote(!shownote)}
-          >
-            {shownote ? <StickyNote size={22} /> : <Globe size={22} />}
-          </button>
-
-          <button
-            className="icon-btn"
-            aria-label="Add Site"
-            onClick={openAddSitePopup}
-          >
-            <Plus size={22} />
-          </button>
-
-          <button
-            className="icon-btn"
-            aria-label="Account"
-            onClick={openProfilePopup}
-          >
-            <User size={22} />
-          </button>
-        </div>
-      </div>
-    </nav>
+    </>
   );
 }
 
