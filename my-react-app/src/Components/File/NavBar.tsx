@@ -69,7 +69,7 @@ function Navbar() {
 
       {PopUP &&
         (shownote ? (
-          <AddNotePopUp onClose={closeAddSitePopup} onSubmit={handleAddSite} />
+          <AddNotePopUp onClose={closeAddSitePopup} />
         ) : (
           <AddSitePopUp onClose={closeAddSitePopup} onSubmit={handleAddSite} loading={loading} />
         ))}

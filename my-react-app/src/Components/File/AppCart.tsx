@@ -9,10 +9,7 @@ export default function AppCart() {
 
   const { siteData, setSiteData, setRespond } = useApp();
   const [loading, setloading] = useState(false);
-
   const [openMenu, setOpenMenu] = useState<string | null>(null);
-
-  console.log(siteData);
 
   // Remove site
   const handleRemove = async (id: string) => {
@@ -47,7 +44,6 @@ export default function AppCart() {
         type: "error",
       });
     }
-
     setOpenMenu(null);
   };
 

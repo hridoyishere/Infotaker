@@ -1,8 +1,17 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 
+import type { NoteData } from "./Api/noteApi";
+
 interface ResponseData {
   message: string;
   type: "success" | "error" | "";
+}
+
+interface SiteDatas {
+  _id?: string;
+  userid: string;
+  name: string;
+  url: string;
 }
 
 interface AppContextType {
@@ -11,11 +20,12 @@ interface AppContextType {
 
   respond: ResponseData;
   setRespond: React.Dispatch<React.SetStateAction<ResponseData>>;
-}
 
-interface AppContextType {
   siteData: SiteDatas[];
   setSiteData: React.Dispatch<React.SetStateAction<SiteDatas[]>>;
+
+  noteData: NoteData[];
+  setNoteData: React.Dispatch<React.SetStateAction<NoteData[]>>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -34,16 +44,12 @@ interface AppProviderProps {
   children: ReactNode;
 }
 
-interface SiteDatas {
-  _id?: string;
-  userid: string;
-  name: string;
-  url: string;
-}
-
 export const AppProvider = ({ children }: AppProviderProps) => {
   const [shownote, setShownNote] = useState(false);
+
   const [siteData, setSiteData] = useState<SiteDatas[]>([]);
+
+  const [noteData, setNoteData] = useState<NoteData[]>([]);
 
   const [respond, setRespond] = useState<ResponseData>({
     message: "",
@@ -53,10 +59,15 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   const value: AppContextType = {
     shownote,
     setShownNote,
+
     respond,
     setRespond,
+
     siteData,
     setSiteData,
+
+    noteData,
+    setNoteData,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
