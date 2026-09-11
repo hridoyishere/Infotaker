@@ -117,6 +117,7 @@ export default function NotePage() {
       <div className="note-page-header">
         <h1>My Notes</h1>
         <p>Keep your important notes here.</p>
+        {filteredSites.length===0?`No results for ${searchTerm}`:""}
       </div>
 
       <div className="notes-container">
