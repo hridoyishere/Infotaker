@@ -24,14 +24,14 @@ export interface RemoveNoteResponse {
   error?: string;
 }
 
-const API_URL = "http://localhost:5000/api/notes";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const createNote = async (
   title: string,
   text: string,
   userid: string,
 ): Promise<CreateNoteResponse> => {
-  const response = await fetch(API_URL, {
+  const response = await fetch(`${API_URL}/api/notes`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -47,7 +47,7 @@ export const createNote = async (
 };
 
 export const getNotes = async (userid: string): Promise<NoteResponse> => {
-  const response = await fetch(`${API_URL}/${userid}`);
+  const response = await fetch(`${API_URL}/api/notes/${userid}`);
 
   return response.json();
 };
@@ -56,7 +56,7 @@ export const removeNote = async (
   noteid: string,
   userid: string,
 ): Promise<RemoveNoteResponse> => {
-  const response = await fetch(`${API_URL}/${noteid}/${userid}`, {
+  const response = await fetch(`${API_URL}/api/notes/${noteid}/${userid}`, {
     method: "DELETE",
   });
 

@@ -25,14 +25,14 @@ export interface CreateSiteResponse {
   site?: SiteData;
 }
 
-const API_URL = "http://localhost:5000/api/sites";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const createSite = async (
   name: string,
   url: string,
   userid: string,
 ): Promise<CreateSiteResponse> => {
-  const response = await fetch(API_URL, {
+  const response = await fetch(`${API_URL}/api/sites`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -49,13 +49,13 @@ export const createSite = async (
 
 export const getSites = async ( userid: string,): Promise<SiteResponse> => {
 
-  const response = await fetch(`${API_URL}/${userid}`);
+  const response = await fetch(`${API_URL}/api/sites/${userid}`);
 
   return response.json();
 };
 
 export const removeSite = async (  siteid: string, userid: string ): Promise<RemoveSiteResponse> => {
-  const response = await fetch(`${API_URL}/${siteid}/${userid}`, {
+  const response = await fetch(`${API_URL}/api/sites/${siteid}/${userid}`, {
     method: "DELETE",
   });
 
