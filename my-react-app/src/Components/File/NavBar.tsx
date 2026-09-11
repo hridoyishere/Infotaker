@@ -85,7 +85,7 @@ function Navbar() {
           <div className="nav-search">
             <input
               type="text"
-              placeholder="Search by name"
+              placeholder="Search"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
