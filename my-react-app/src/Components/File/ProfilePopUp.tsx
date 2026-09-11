@@ -28,7 +28,7 @@ export const ProfilePopUp = ({ onClose }: ProfilePopUpProps) => {
         <div className="profile-header">
 
           <div className="profile-avatar">
-            H
+            {User?.name[0]}
           </div>
 
           <div className="profile-info">

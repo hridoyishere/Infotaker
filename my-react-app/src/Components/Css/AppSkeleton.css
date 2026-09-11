@@ -1,0 +1,79 @@
+/* Base pulse animation for Skeleton elements */
+@keyframes skeleton-pulse {
+  0% {
+    background-color: #e2e8f0;
+  }
+  50% {
+    background-color: #cbd5e1;
+  }
+  100% {
+    background-color: #e2e8f0;
+  }
+}
+
+.skeleton-box {
+  animation: skeleton-pulse 1.5s infinite ease-in-out;
+  border-radius: 6px;
+}
+
+.skeleton-card {
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.skeleton-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-bottom: 8px;
+}
+
+.skeleton-text {
+  width: 70%;
+  height: 14px;
+}
+
+
+/* Skeleton Pulse Animation */
+@keyframes skeleton-pulse {
+  0% {
+    background-color: #e2e8f0;
+  }
+  50% {
+    background-color: #cbd5e1;
+  }
+  100% {
+    background-color: #e2e8f0;
+  }
+}
+
+.skeleton-box {
+  animation: skeleton-pulse 1.5s infinite ease-in-out;
+  border-radius: 4px;
+}
+
+.skeleton-note-card {
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.skeleton-title {
+  width: 60%;
+  height: 20px;
+}
+
+.skeleton-text-line {
+  width: 100%;
+  height: 14px;
+}
+
+.skeleton-text-line.short {
+  width: 80%;
+}

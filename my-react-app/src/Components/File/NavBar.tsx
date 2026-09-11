@@ -10,10 +10,18 @@ import "../Css/Navbar.css";
 
 function Navbar() {
   const user = getUser();
-  const { shownote, setShownNote, setRespond, setSiteData } = useApp();
+  const {
+    shownote,
+    setShownNote,
+    setRespond,
+    setSiteData,
+    setSearchTerm,
+    searchTerm,
+  } = useApp();
   const [PopUP, setPopUP] = useState(false);
   const [loading, setloading] = useState(false);
   const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(false);
+  console.log(searchTerm)
 
   const openAddSitePopup = () => {
     setPopUP(true);
@@ -75,7 +83,12 @@ function Navbar() {
 
           {/* Search Bar */}
           <div className="nav-search">
-            <input type="text" placeholder="Search by name" />
+            <input
+              type="text"
+              placeholder="Search by name"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
 
             <button type="submit" aria-label="Search">
               <Search size={18} />
@@ -87,7 +100,7 @@ function Navbar() {
             <button
               className="icon-btn"
               aria-label="Add Site"
-              onClick={() => setShownNote(!shownote)}
+              onClick={() => {setShownNote(!shownote); setSearchTerm("")}}
             >
               {shownote ? <StickyNote size={22} /> : <Globe size={22} />}
             </button>

@@ -26,6 +26,9 @@ interface AppContextType {
 
   noteData: NoteData[];
   setNoteData: React.Dispatch<React.SetStateAction<NoteData[]>>;
+
+  searchTerm:string;
+  setSearchTerm:React.Dispatch<React.SetStateAction<string>>
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -46,6 +49,8 @@ interface AppProviderProps {
 
 export const AppProvider = ({ children }: AppProviderProps) => {
   const [shownote, setShownNote] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
 
   const [siteData, setSiteData] = useState<SiteDatas[]>([]);
 
@@ -68,6 +73,9 @@ export const AppProvider = ({ children }: AppProviderProps) => {
 
     noteData,
     setNoteData,
+
+    searchTerm,
+    setSearchTerm,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

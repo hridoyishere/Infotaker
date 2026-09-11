@@ -1,20 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo} from "react";
 import { getNotes, removeNote } from "../../Api/noteApi";
 import { useApp } from "../../Context";
 import { getUser } from "../../Api/authStorage";
+import { NotePageSkeleton } from "./AppSkeleton";
 import "../Css/Note.css";
 
 export default function NotePage() {
   const user = getUser();
 
-  const { setRespond, noteData, setNoteData } = useApp();
+  const { setRespond, noteData, setNoteData, searchTerm } = useApp();
 
   const [loading, setLoading] = useState(false);
+  const [skeletonloading, setskeletonloading] = useState(false);
   const [openMenu, setOpenMenu] = useState<number | null>(null);
+
+  const filteredSites = useMemo(() => {
+    const term = (searchTerm || "").trim().toLowerCase();
+    if (!term) return noteData;
+
+    return noteData.filter((site) => {
+      const name = (site.title || "").toLowerCase();
+      const url = (site.text || "").toLowerCase();
+      return name.includes(term) || url.includes(term);
+    });
+  }, [noteData, searchTerm]);
 
   const handleNoteFetching = async () => {
     if (!user) return;
-    setLoading(true);
+    setskeletonloading(true);
     try {
       const data = await getNotes(user.id);
 
@@ -36,7 +49,7 @@ export default function NotePage() {
         type: "error",
       });
     } finally {
-      setLoading(false);
+      setskeletonloading(false);
     }
   };
 
@@ -52,7 +65,6 @@ export default function NotePage() {
           message: data.error || "Failed to delete site",
           type: "error",
         });
-        setLoading(false);
         return;
       } else {
         setRespond({
@@ -62,22 +74,43 @@ export default function NotePage() {
         setNoteData((currentSites) =>
           currentSites.filter((site) => site._id !== id),
         );
-        setLoading(false);
       }
     } catch (error) {
       console.log(error);
-      setLoading(false);
       setRespond({
         message: "Something went wrong while delete site.",
         type: "error",
       });
+    } finally {
+      setLoading(false);
     }
     setOpenMenu(null);
   };
 
+  const call = () => {
+    if (noteData.length === 0) {
+      handleNoteFetching();
+    }
+  };
+
   useEffect(() => {
-    handleNoteFetching();
+    call();
   }, []);
+
+  if (skeletonloading) {
+    return <NotePageSkeleton />;
+  }
+
+  if (noteData.length === 0) {
+    return (
+      <div className="not-found">
+        <h2>Not Found! Create or refresh.</h2>
+        <button type="button" onClick={handleNoteFetching}>
+          Refresh
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="note-page" onClick={() => setOpenMenu(null)}>
@@ -87,43 +120,46 @@ export default function NotePage() {
       </div>
 
       <div className="notes-container">
-        {noteData.length === 0 ? (
-          <p>No notes found.</p>
-        ) : (
-          noteData.map((note, index) => (
-            <div className="note-card" key={note._id || index}>
-              <button
-                className="note-menu-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
+        {filteredSites.map((note, index) => (
+          <div className="note-card" key={note._id || index}>
+            <button
+              className="note-menu-btn"
+              onClick={(e) => {
+                e.stopPropagation();
 
-                  setOpenMenu(openMenu === index ? null : index);
-                }}
-                aria-label="Note options"
-              >
-                ⋮
-              </button>
+                setOpenMenu(openMenu === index ? null : index);
+              }}
+              aria-label="Note options"
+            >
+              ⋮
+            </button>
 
-              {openMenu === index && (
-                <div className="note-menu" onClick={(e) => e.stopPropagation()}>
-                  <button
-                    onClick={() => {
-                      if (note._id) handleRemove(note._id);
-                    }}
-                    disabled={loading}
-                  >
-                    {loading ? <div className="loader"></div> : "Remove"}
-                  </button>
-                  <button>Copy</button>
-                </div>
-              )}
+            {openMenu === index && (
+              <div className="note-menu" onClick={(e) => e.stopPropagation()}>
+                <button
+                  onClick={() => {
+                    if (note._id) handleRemove(note._id);
+                  }}
+                  disabled={loading}
+                >
+                  {loading ? <div className="loader"></div> : "Remove"}
+                </button>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(note.text);
+                    setOpenMenu(null);
+                  }}
+                >
+                  Copy
+                </button>
+              </div>
+            )}
 
-              <h2>{note.title}</h2>
+            <h2>{note.title}</h2>
 
-              <p>{note.text}</p>
-            </div>
-          ))
-        )}
+            <p>{note.text}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

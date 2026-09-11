@@ -1,15 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useMemo } from "react";
 import { getSites, removeSite } from "../../Api/siteApi";
 import { getUser } from "../../Api/authStorage";
 import { useApp } from "../../Context";
+import { AppCartSkeleton } from "./AppSkeleton";
 import "../Css/AppCart.css";
 
 export default function AppCart() {
   const user = getUser();
 
-  const { siteData, setSiteData, setRespond } = useApp();
+  const { siteData, setSiteData, setRespond, searchTerm } = useApp();
   const [loading, setloading] = useState(false);
+  const [skeletonloading, setskeletonloading] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+
+  const filteredSites = useMemo(() => {
+    const term = (searchTerm || "").trim().toLowerCase();
+    if (!term) return siteData;
+
+    return siteData.filter((site) => {
+      const name = (site.name || "").toLowerCase();
+      const url = (site.url || "").toLowerCase();
+      return name.includes(term) || url.includes(term);
+    });
+  }, [siteData, searchTerm]);
 
   // Remove site
   const handleRemove = async (id: string) => {
@@ -52,6 +65,7 @@ export default function AppCart() {
     if (!user) return;
 
     try {
+      setskeletonloading(true);
       const data = await getSites(user.id);
 
       if (!data.success) {
@@ -62,7 +76,9 @@ export default function AppCart() {
         return;
       }
       setSiteData(data.sites);
+      setskeletonloading(false);
     } catch (error) {
+      setskeletonloading(false);
       console.error("Fetching sites error:", error);
       setRespond({
         message: "Something went wrong while fetching sites.",
@@ -71,19 +87,38 @@ export default function AppCart() {
     }
   };
 
-  // Fetch sites when component loads
+  const call = () => {
+    if (siteData.length === 0) {
+      handleSiteFetching();
+    }
+  };
   useEffect(() => {
-    handleSiteFetching();
+    call();
   }, []);
+
+  if (skeletonloading) {
+    return <AppCartSkeleton />;
+  }
+
+  if (siteData.length === 0) {
+    return (
+      <div className="not-found">
+        <h2>Not Found! Create or refresh.</h2>
+        <button type="button" onClick={handleSiteFetching}>
+          Refresh
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="AppCart" onClick={() => setOpenMenu(null)}>
-      {siteData.length === 0 ? (
-       <div className="nofound">
-        <p>No link found!</p>
-       </div>
+      {filteredSites.length === 0 ? (
+        <div className="nofound">
+          <p>No results for "{searchTerm}"!</p>
+        </div>
       ) : (
-        siteData.map((site) => (
+        filteredSites.map((site) => (
           <div className="site-card" key={site._id}>
             {/* Three-dot button */}
             <button
@@ -111,7 +146,14 @@ export default function AppCart() {
                 >
                   {loading ? <div className="loader"></div> : "Remove"}
                 </button>
-                <button>Copy</button>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(site.url);
+                    setOpenMenu(null);
+                  }}
+                >
+                  Copy
+                </button>
               </div>
             )}
 
